@@ -7,7 +7,7 @@ plugins {
 
 war {
   archiveFileName = "${archivesBaseName}.war"
-  destinationDirectory = file("./")      // Project root
+  destinationDirectory = file("../")      // Project root
 }
 
 
