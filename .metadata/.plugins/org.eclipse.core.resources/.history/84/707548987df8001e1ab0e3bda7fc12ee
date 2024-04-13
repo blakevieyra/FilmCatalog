@@ -1,0 +1,16 @@
+package com.skilldistillery.videostorerest.services;
+
+import java.util.List;
+
+import com.skilldistillery.jpavideostore.entities.Category;
+import com.skilldistillery.jpavideostore.entities.Film;
+import com.skilldistillery.jpavideostore.entities.Rating;
+
+public interface RatingService {
+
+	List<Rating> findAll();
+
+	Rating getRatingById(int id);
+
+	List<Film> getFilmsByRating(int id);
+}

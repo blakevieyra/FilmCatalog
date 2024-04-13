@@ -1,0 +1,13 @@
+INDEX VERSION 1.134
+/Users/blakevieyra/SD/Java/VideoStore/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/3113779763.index
+/BootMVCVideoStore/src/main/java
+/Users/blakevieyra/SD/Java/VideoStore/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/1097166505.index
+/BootMVCVideoStore/src/main/java
+/Users/blakevieyra/SD/Java/VideoStore/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/1453803394.index
+/VideoStoreREST/src/main/java
+/Users/blakevieyra/SD/Java/VideoStore/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/1876810239.index
+/VideoStoreREST/src/main/java
+/Users/blakevieyra/SD/Java/VideoStore/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/2667526787.index
+/MVCFilmSite/src/main/java
+/Users/blakevieyra/SD/Java/VideoStore/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/4103186464.index
+/VideoStoreREST/src/main/java

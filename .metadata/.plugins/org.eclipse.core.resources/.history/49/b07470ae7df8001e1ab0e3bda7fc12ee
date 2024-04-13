@@ -1,0 +1,43 @@
+package com.skilldistillery.videostorerest.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.skilldistillery.jpavideostore.entities.Category;
+import com.skilldistillery.jpavideostore.entities.Film;
+import com.skilldistillery.jpavideostore.entities.Rating;
+import com.skilldistillery.videostorerest.repositories.CategoryRepository;
+import com.skilldistillery.videostorerest.repositories.FilmRepository;
+import com.skilldistillery.videostorerest.repositories.RatingRepository;
+
+import jakarta.transaction.Transactional;
+
+@Service
+@Transactional
+public class RatingServiceImples implements RatingService {
+
+	@Autowired
+	private RatingRepository ratingRepo;
+
+	@Autowired
+	private FilmRepository filmRepository;
+
+	@Override
+	public List<Rating> findAll() {
+		return ratingRepo.findAll();
+	}
+
+	@Override
+	public List<Film> findFilmByRating(Rating rating) {
+		return filmRepository.findByRating(rating);
+	}
+
+	@Override
+	public List<Film> getFilmsByRating(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

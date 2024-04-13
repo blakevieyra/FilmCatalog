@@ -1,0 +1,564 @@
+window.addEventListener('load', function(e) {
+	console.log('document loaded');
+	init();
+});
+
+function init() {
+	document.filmForm.lookup.addEventListener('click', function(event) {
+		event.preventDefault();
+		let filmId = document.filmForm.filmId.value;
+		console.log(filmId);
+		filmData.textContent = '';
+		actorData.textContent = '';
+		if (!isNaN(filmId) && filmId > 0) {
+			getFilm(filmId);
+		}
+	});
+	document.newFilmForm.addFilmBtn.addEventListener('click', function(e) {
+		e.preventDefault();
+		console.log('adding film');
+		let newFilm = {
+			title: newFilmForm.filmTitle.value,
+			description: newFilmForm.description.value,
+			rating: newFilmForm.rating.value,
+			releaseYear: newFilmForm.releaseYear.value,
+			length: newFilmForm.length.value,
+			language: {
+				id: newFilmForm.language.value
+			}
+		};
+		filmData.textContent = '';
+		actorData.textContent = '';
+		addFilm(newFilm);
+	});
+	document.updateFilmForm.updateFilmBtn.addEventListener('click', function(e) {
+		e.preventDefault();
+		console.log('updating film');
+		let updatedFilm = {
+			id: updatedFilmForm.filmId.value,
+			title: updatedFilmForm.filmTitle.value,
+			description: updateFilmForm.description.value,
+			rating: updatedFilmForm.rating.value,
+			releaseYear: updatedFilmForm.releaseYear.value,
+			length: updatedFilmForm.length.value,
+			language: {
+				id: updatedFilmForm.language.value
+			}
+		};
+		filmData.textContent = '';
+		actorData.textContent = '';
+		updateFilm(updatedFilm);
+	});
+	document.keywordSearchForm.keywordBtn.addEventListener('click', function(e) {
+		e.preventDefault();
+		console.log('searching for film');
+		let keyword = keywordSearchForm.keyword.value;
+		console.log(keyword)
+		filmData.textContent = '';
+		actorData.textContent = '';
+		getFilmByKeyword(keyword);
+	});
+	document.categoryForm.categoryBtn.addEventListener('click', function(e) {
+		e.preventDefault();
+		console.log('searching by category');
+		let categoryId = categoryForm.category.value;
+		console.log(categoryId)
+		filmData.textContent = '';
+		actorData.textContent = '';
+		getFilmByCategory(categoryId);
+	});
+	document.ratingForm.ratingBtn.addEventListener('click', function(e) {
+		e.preventDefault();
+		console.log('searching by rating');
+		let rating = ratingForm.ratingSelect.value;
+		console.log(rating)
+		filmData.textContent = '';
+		actorData.textContent = '';
+		getFilmsByRating(rating);
+	});
+	document.languageForm.languageBtn.addEventListener('click', function(e) {
+		e.preventDefault();
+		console.log('searching by language');
+		let language = languageForm.language.value;
+		console.log(language)
+		filmData.textContent = '';
+		actorData.textContent = '';
+		getFilmsByLanguage(language);
+	});
+	document.rentalPriceForm.rentalBtn.addEventListener('click', function(e) {
+		e.preventDefault();
+		console.log('searching rental cost');
+		let price1 = rentalPriceForm.price1.value;
+		let price2 = rentalPriceForm.price2.value;
+		console.log(price1, price2)
+		filmData.textContent = '';
+		actorData.textContent = '';
+		getFilmByRentalPrice(price1, price2);
+	});
+	document.replacePriceForm.replaceBtn.addEventListener('click', function(e) {
+		e.preventDefault();
+		console.log('searching replacement cost');
+		let price1 = replacePriceForm.price1.value;
+		let price2 = replacePriceForm.price2.value;
+		console.log(price1, price2)
+		filmData.textContent = '';
+		actorData.textContent = '';
+		getFilmByReplaceCost(price1, price2);
+	});
+	document.deleteFilmForm.deleteBtn.addEventListener('click', function(e) {
+		e.preventDefault();
+		console.log('deleting film');
+		let filmId = deleteFilmForm.deleteId.value;
+		console.log(filmId)
+		filmData.textContent = '';
+		actorData.textContent = '';
+		deleteFilm(filmId);
+	});
+	loadLanguages();
+	loadCategories();
+}
+
+function getFilmByRentalPrice(price1, price2) {
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', `api/films/${price1}/${price2}`);
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === XMLHttpRequest.DONE) {
+			if (xhr.status === 200) {
+				let films = JSON.parse(xhr.responseText);
+				console.log(films);
+				displaySearchedFilms(films);
+			} else {
+				let doc = document.getElementById('filmData');
+				let error = document.createElement('h1');
+				error.textContent = "Films not found: " + xhr.status;
+				doc.appendChild(error);
+			}
+		}
+	};
+	xhr.send();
+}
+
+function getFilmByReplaceCost(price1, price2) {
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', `api/films/replacement/${price1}/${price2}`);
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === XMLHttpRequest.DONE) {
+			if (xhr.status === 200) {
+				let films = JSON.parse(xhr.responseText);
+				console.log(films);
+				displaySearchedFilms(films);
+			} else {
+				let doc = document.getElementById('filmData');
+				let error = document.createElement('h1');
+				error.textContent = "Films not found: " + xhr.status;
+				doc.appendChild(error);
+			}
+		}
+	};
+	xhr.send();
+}
+
+
+function getFilmByCategory(categoryId) {
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', 'api/categories/' + categoryId + "/films");
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === XMLHttpRequest.DONE) {
+			if (xhr.status === 200) {
+				let films = JSON.parse(xhr.responseText);
+				console.log(films);
+				displaySearchedFilms(films);
+			} else {
+				let doc = document.getElementById('filmData');
+				let error = document.createElement('h1');
+				error.textContent = "Films not found: " + xhr.status;
+				doc.appendChild(error);
+			}
+		}
+	};
+	xhr.send();
+}
+
+function getFilmsByRating(rating) {
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', `api/films/rating/${rating}`);
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === XMLHttpRequest.DONE) {
+			if (xhr.status === 200) {
+				let films = JSON.parse(xhr.responseText);
+				console.log(films);
+				displaySearchedFilms(films);
+			} else {
+				let doc = document.getElementById('filmData');
+				let error = document.createElement('h1');
+				error.textContent = "Films not found: " + xhr.status;
+				doc.appendChild(error);
+			}
+		}
+	};
+	xhr.send();
+}
+
+function getFilmsByLanguage(language) {
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', `api/films/language/${language}`);
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === XMLHttpRequest.DONE) {
+			if (xhr.status === 200) {
+				let films = JSON.parse(xhr.responseText);
+				console.log(films);
+				displaySearchedFilms(films);
+			} else {
+				let doc = document.getElementById('filmData');
+				let error = document.createElement('h1');
+				error.textContent = "Films not found: " + xhr.status;
+				doc.appendChild(error);
+			}
+		}
+	};
+	xhr.send();
+}
+
+function getFilmByKeyword(keyword) {
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', 'api/films/search/' + keyword);
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === XMLHttpRequest.DONE) {
+			if (xhr.status === 200) {
+				let films = JSON.parse(xhr.responseText);
+				console.log(films);
+				displaySearchedFilms(films);
+			} else {
+				let doc = document.getElementById('filmData');
+				let error = document.createElement('h1');
+				error.textContent = "Films not found: " + xhr.status;
+				doc.appendChild(error);
+			}
+		}
+	};
+	xhr.send();
+}
+
+function loadCategories() {
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', 'api/categories');
+
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === xhr.DONE) {
+			if (xhr.status === 200) {
+				let categories = JSON.parse(xhr.responseText)
+				displayCategories(categories);
+			} else {
+				let doc = document.getElementById('filmData');
+				let error = document.createElement('h1');
+				error.textContext = "Film not found: " + xhr.status;
+				doc.appendChild(error);
+			}
+		}
+	};
+	xhr.send();
+}
+
+function displayCategories(category) {
+	let categoryList1 = document.getElementById('categoryList1')
+	categoryList1.textContent = '';
+
+	for (cat of category) {
+		let opt = document.createElement('option');
+		opt.textContent = cat.name;
+		opt.value = cat.id;
+		categoryList1.appendChild(opt);
+	}
+	let categoryList2 = document.getElementById('categoryList2')
+	categoryList2.textContent = '';
+
+	for (cat of category) {
+		let opt = document.createElement('option');
+		opt.textContent = cat.name;
+		opt.value = cat.id;
+		categoryList2.appendChild(opt);
+	}
+	let categoryList3 = document.getElementById('categoryList3')
+	categoryList3.textContent = '';
+
+	for (cat of category) {
+		let opt = document.createElement('option');
+		opt.textContent = cat.name;
+		opt.value = cat.id;
+		categoryList3.appendChild(opt);
+	}
+}
+
+
+function loadLanguages() {
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', 'api/languages');
+
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === xhr.DONE) {
+			if (xhr.status === 200) {
+				let language = JSON.parse(xhr.responseText)
+				displayLanguage(language);
+			} else {
+				let doc = document.getElementById('filmData');
+				let error = document.createElement('h1');
+				error.textContext = "Film not found: " + xhr.status;
+				doc.appendChild(error);
+			}
+		}
+	};
+	xhr.send();
+}
+
+function displayLanguage(language) {
+	let languageList1 = document.getElementById('languageList1');
+	languageList1.textContent = '';
+	for (lang of language) {
+		let opt = document.createElement('option');
+		opt.textContent = lang.name;
+		opt.value = lang.id;
+		languageList1.appendChild(opt);
+	}
+	let languageList2 = document.getElementById('languageList2');
+	languageList2.textContent = '';
+	for (lang of language) {
+		let opt = document.createElement('option');
+		opt.textContent = lang.name;
+		opt.value = lang.id;
+		languageList2.appendChild(opt);
+	}
+	let languageList3 = document.getElementById('languageList3');
+	languageList3.textContent = '';
+	for (lang of language) {
+		let opt = document.createElement('option');
+		opt.textContent = lang.name;
+		opt.value = lang.id;
+		languageList3.appendChild(opt);
+	}
+}
+
+function getFilm(filmId) {
+	if (!filmId || isNaN(filmId)) {
+		throw new Error("Invalid film Id.")
+	}
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', 'api/films/' + filmId);
+
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === xhr.DONE) {
+			if (xhr.status === 200) {
+				let film = JSON.parse(xhr.responseText)
+				displayFilm(film);
+				getActors(filmId);
+			} else {
+				let doc = document.getElementById('filmData');
+				let error = document.createElement('h1');
+				error.textContext = "Film not found: " + xhr.status;
+				doc.appendChild(error);
+			}
+		}
+	};
+	xhr.send();
+}
+
+function displaySearchedFilms(films) {
+	let dataDiv = document.getElementById('filmData');
+	dataDiv.textContent = '';
+	let actorDiv = document.getElementById('actorData');
+	actorDiv.textContent = '';
+	let h3 = document.createElement('h3');
+	if (films.length > 0) {
+		h3.textContent = "Found films: " + films.length;
+	} else {
+		h3.textContent = "No films found.";
+	}
+	dataDiv.appendChild(h3);
+	let ul = document.createElement('ul');
+	for (let film of films) {
+		let li = document.createElement('li');
+		let link = document.createElement('a');
+		link.textContent = film.title;
+		link.href = "#";
+		link.addEventListener('click', function(event) {
+			event.preventDefault();
+			displayFilm(film);
+
+		});
+		li.appendChild(link);
+		ul.appendChild(li);
+	}
+	dataDiv.appendChild(ul);
+}
+
+
+function displayFilm(film) {
+	let dataDiv = document.getElementById('filmData');
+	dataDiv.textContent = '';
+
+	let actorDiv = document.getElementById('actorData');
+	actorDiv.textContent = '';
+
+	let h2Title = document.createElement('h2');
+	h2Title.textContent = film.title;
+	dataDiv.appendChild(h2Title)
+
+	let description = document.createElement('blockquote');
+	description.textContent = film.description;
+	dataDiv.appendChild(description);
+
+	let ul = document.createElement('ul');
+
+	let liFilmId = document.createElement('li');
+	liFilmId.textContent = "Film ID: " + film.id;
+	ul.appendChild(liFilmId);
+
+	let liRating = document.createElement('li');
+	liRating.textContent = "Rating: " + film.rating;
+	ul.appendChild(liRating);
+
+	let liReleaseYear = document.createElement('li');
+	liReleaseYear.textContent = "Release year: " + film.releaseYear;
+	ul.appendChild(liReleaseYear);
+
+	let liLength = document.createElement('li');
+	liLength.textContent = "Film Length: " + film.length;
+	ul.appendChild(liLength);
+
+	let liLanguage = document.createElement('li');
+	liLanguage.textContent = "Language:  " + film.language.name;
+	ul.appendChild(liLanguage);
+
+	let liRentalPrice = document.createElement('li');
+	liRentalPrice.textContent = "Rental Price:  " + film.rentalRate;
+	ul.appendChild(liRentalPrice);
+
+	let liReplacementCost = document.createElement('li');
+	liReplacementCost.textContent = "Replacement Cost:  " + film.replacementCost;
+	ul.appendChild(liReplacementCost);
+
+	dataDiv.appendChild(ul);
+}
+
+function getActors(filmId) {
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', 'api/films/' + filmId + "/actors");
+
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === XMLHttpRequest.DONE) {
+			if (xhr.status === 200) {
+				let actors = JSON.parse(xhr.responseText);
+				displayActors(actors);
+			} else {
+				let doc = document.getElementById('actorData');
+				let error = document.createElement('h1');
+				error.textContent = "Actors not found: " + xhr.status;
+				doc.appendChild(error);
+			}
+		}
+	};
+	xhr.send();
+}
+
+function displayActors(actors) {
+	let actorDiv = document.getElementById('actorData');
+	actorDiv.textContent = '';
+	let actorHeader = document.createElement('h3');
+	actorHeader.textContent = 'Actors ';
+	actorDiv.appendChild(actorHeader);
+	let ul = document.createElement('ul');
+
+	for (let actor of actors) {
+		let li = document.createElement('li');
+		li.textContent = actor.firstName + " " + actor.lastName;
+		ul.appendChild(li);
+	}
+	actorDiv.appendChild(ul);
+}
+
+
+function addFilm(newFilm) {
+	let xhr = new XMLHttpRequest();
+	xhr.open('POST', 'api/films');
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === XMLHttpRequest.DONE) {
+			if (xhr.status === 201) {
+				let film = JSON.parse(xhr.responseText);
+				getFilm(film.id);
+			} else {
+				let doc = document.getElementById('filmData');
+				let error = document.createElement('h1');
+				error.textContent = "Film Not Created: " + xhr.status; // Corrected property name
+				doc.appendChild(error);
+			}
+		}
+	};
+	xhr.setRequestHeader("Content-type", "application/json");
+	let newFilmJSON = JSON.stringify(newFilm);
+	xhr.send(newFilmJSON);
+}
+
+function updateFilm(filmId, updatedFilm) {
+	let xhr = new XMLHttpRequest();
+	xhr.open('PUT', 'api/films/' + filmId);
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === XMLHttpRequest.DONE) {
+			if (xhr.status === 200) {
+				let film = JSON.parse(xhr.responseText);
+				getFilm(film.id);
+			} else {
+				let doc = document.getElementById('filmData');
+				let error = document.createElement('h1');
+				error.textContent = "Film Not Updated: " + xhr.status; 
+				doc.appendChild(error);
+			}
+		}
+	};
+	xhr.setRequestHeader("Content-type", "application/json");
+	let newFilmJSON = JSON.stringify(updatedFilm);
+	xhr.send(newFilmJSON);
+}
+function deleteFilm(filmId) {
+	let xhr = new XMLHttpRequest();
+	xhr.open('DELETE', 'api/films/' + filmId);
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === XMLHttpRequest.DONE) {
+			if (xhr.status === 204) {
+				let doc = document.getElementById('filmData');
+				let error = document.createElement('h1');
+				error.textContent = "Film Deleted: " + xhr.status;
+				doc.appendChild(error);
+			} else {
+				let doc = document.getElementById('filmData');
+				let error = document.createElement('h1');
+				error.textContent = "Film Not Deleted: " + xhr.status;
+				doc.appendChild(error);
+			}
+		}
+
+	};
+	xhr.setRequestHeader("Content-type", "application/json");
+	xhr.send(); 
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const man = document.getElementById('man');
+    const popcorn = document.getElementById('popcorn');
+    const searchText = document.getElementById('searchText');
+
+    setTimeout(() => {
+        searchText.style.opacity = '1';
+        searchText.innerText = "Still searching for the best movies...";
+    }, 10000);
+});
+
+
+
+
+
+
+
+
+
+
+
+

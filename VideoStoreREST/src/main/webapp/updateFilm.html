@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Update a Film</title>
+</head>
+<body>
+	<h1>Update Film</h1>
+	<form method="post" action="/MVCFilmSite/updateFilm.do">
+		<label for="title">Title:</label> <input type="text"
+			id="title" name="title" required value="${film.title}"><br>
+		<br> <label for="description">Description:</label>
+		<textarea id="description" name="description" required value="${film.description}" rows="4"
+			cols="50"></textarea>
+		<br> <br> <label for="release_year">Release
+			Year:</label> <input type="number" id="release_year"
+			name="releaseYear" min="1901" max="2099"
+			value="${film.releaseYear}"> <br> <br> <label
+			for="language_id">Language:</label> <select
+			id="language_id" name="languageId">
+			<option value="1" ${film.languageId==1? 'selected' : ''}>English</option>
+			<option value="2" ${film.languageId==2? 'selected' : ''}>Italian</option>
+			<option value="3" ${film.languageId==3? 'selected' : ''}>Japanese</option>
+			<option value="4" ${film.languageId==4? 'selected' : ''}>Mandarin</option>
+			<option value="5" ${film.languageId==5? 'selected' : ''}>French</option>
+			<option value="6" ${film.languageId==6? 'selected' : ''}>German</option>
+		</select> <br> <br> <label for="rental_duration">Rental
+			Duration:</label> <input type="number" id="rental_duration"
+			name="rentalDuration" required value="${film.rentalDuration}">
+		<br> <br> <label for="rentalRate">Rental Rate:</label> <input
+			type="number" id="rentalRate" name="rentalRate" step="0.01" required
+			value="${rentalRate}"> <br> <br> <label
+			for="length">Length:</label> <input type="number" id="length"
+			name="length" value="${film.length}"> <br> <br> <label
+			for="replacement_cost">Replacement Cost:</label> <input type="number"
+			id="replacement_cost" name="replacementCost" step="0.01" required
+			value="${film.replacementCost}"> <br> <br> <label
+			for="rating">Rating:</label> <select id="rating" name="rating">
+			<option value="G" ${film.rating=='G' ? 'selected' : ''}>G</option>
+			<option value="PG" ${film.rating=='PG' ? 'selected' : ''}>PG</option>
+			<option value="PG13" ${film.rating=='PG13' ? 'selected' : ''}>PG13</option>
+			<option value="R" ${film.rating=='R' ? 'selected' : ''}>R</option>
+			<option value="NC17" ${film.rating=='NC17' ? 'selected' : ''}>NC17</option>
+		</select> <br> <br> <label>Special Features:</label><br> <input
+			type="checkbox" id="trailers" name="specialFeatures" value="Trailers">
+		<label for="trailers">Trailers</label><br> <input type="checkbox"
+			id="commentaries" name="specialFeatures" value="Commentaries">
+		<label for="commentaries">Commentaries</label><br> <input
+			type="checkbox" id="deletedScenes" name="specialFeatures"
+			value="Deleted Scenes"> <label for="deletedScenes">Deleted
+			Scenes</label><br> <input type="checkbox" id="behindTheScenes"
+			name="specialFeatures" value="Behind the Scenes"> <label
+			for="behindTheScenes">Behind the Scenes</label><br>
+
+		<!-- Add more form fields here similarly -->
+
+		<input type="submit" value="Update Film">
+	</form>
+	<p>
+		<a href=".">Return Home</a>
+	</p>
+
+	<!-- 	<p style="color: red;">${error}</p> -->
+	<!-- Display error message -->
+</body>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+	crossorigin="anonymous">
+
+
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+	crossorigin="anonymous"></script>
+
+</html>

@@ -1,0 +1,13 @@
+eclipse.preferences.version=1
+org.eclipse.jpt.core.platform=generic2_2
+org.eclipse.jpt.jpa.core.discoverAnnotatedClasses=false
+problem.MAPS_ID_VALUE_NOT_SPECIFIED=error
+problem.PERSISTENCE_NO_PERSISTENCE_UNIT=warning
+problem.PERSISTENCE_UNIT_INVALID_CLASS=ignore
+problem.PERSISTENCE_UNIT_NONEXISTENT_MAPPING_FILE=error
+problem.PERSISTENCE_XML_INVALID_CONTENT=warning
+problem.PERSISTENCE_XML_UNSUPPORTED_CONTENT=warning
+problem.PROJECT_INVALID_LIBRARY_PROVIDER=warning
+problem.PROJECT_MULTIPLE_PERSISTENCE_XML=warning
+problem.PROJECT_NO_PERSISTENCE_XML=warning
+workspace_validation_preferences_overridden=true

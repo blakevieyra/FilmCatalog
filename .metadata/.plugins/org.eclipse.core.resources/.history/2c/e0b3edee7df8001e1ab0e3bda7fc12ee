@@ -1,0 +1,65 @@
+package com.skilldistillery.videostorerest.controllers;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.skilldistillery.jpavideostore.entities.Category;
+import com.skilldistillery.jpavideostore.entities.Film;
+import com.skilldistillery.videostorerest.services.CategoriesService;
+import com.skilldistillery.videostorerest.services.FilmService;
+
+import jakarta.servlet.http.HttpServletResponse;
+
+@RestController
+@RequestMapping("api")
+public class RatingController {
+
+
+	@Autowired
+	private CategoriesService categoriesService;
+
+	@Autowired
+	private FilmService filmService;
+
+	@GetMapping(path = "categories")
+	public List<Category> getCategories() {
+		return categoriesService.findAll();
+	}
+	
+	@GetMapping(path = "categories/{categoryId}")
+	public Category getCategoryById(@PathVariable("categoryId") Integer catId, HttpServletResponse req) {
+		Category category = categoriesService.getCategoryById(catId);
+		try {
+			if (category == null) {
+				req.setStatus(404);
+			} else {
+				req.setStatus(200);
+			}
+		} catch (Exception e) {
+			req.setStatus(400);
+			e.printStackTrace();
+		}
+		return category;
+	}
+	
+	@GetMapping(path = "categories/{categoryId}/films")
+	public List<Film> getFilmsByCategory(@PathVariable("categoryId") int categoryId, HttpServletResponse req) {
+		List<Film> films = categoriesService.getFilmsByCategory(categoryId);
+		try {
+			if (films == null) {
+				req.setStatus(404);
+			} else {
+				req.setStatus(200);
+			}
+		} catch (Exception e) {
+			req.setStatus(400);
+			e.printStackTrace();
+		}
+		return films;
+	}
+}

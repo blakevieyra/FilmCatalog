@@ -1,0 +1,84 @@
+package com.skilldistillery.videostorerest.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.skilldistillery.jpavideostore.entities.Actor;
+import com.skilldistillery.jpavideostore.entities.Film;
+import com.skilldistillery.videostorerest.repositories.ActorRepository;
+import com.skilldistillery.videostorerest.repositories.FilmRepository;
+
+import jakarta.transaction.Transactional;
+
+@Service
+@Transactional
+public class FilmServiceImples implements FilmService {
+
+	@Autowired
+	private FilmRepository filmRepo;
+
+	@Autowired
+	private ActorRepository actorRepo;
+
+	@Override
+	public List<Film> findAll() {
+		return filmRepo.findAll();
+	}
+
+	@Override
+	public Film findById(int id) {
+		return filmRepo.searchById(id);
+	}
+
+	@Override
+	public Film create(Film film) {
+		film.setLanguage(film.getLanguage());
+		return filmRepo.save(film);
+	}
+
+	@Override
+	public Film update(int id, Film film) {
+		Film updatedfilm = findById(id);
+		updatedfilm.setLanguage(film.getLanguage());
+		updatedfilm.setTitle(film.getTitle());
+		updatedfilm.setRentalRate(film.getRentalRate());
+		updatedfilm.setReplacementCost(film.getReplacementCost());
+		updatedfilm.setRentalDuration(film.getRentalDuration());
+		return filmRepo.save(updatedfilm);
+	}
+
+	@Override
+	public boolean delete(int id) {
+		filmRepo.deleteById(id);
+		return !filmRepo.existsById(id);
+	}
+
+	@Override
+	public List<Actor> getFilmActors(int filmId) {
+		if (!filmRepo.existsById(filmId)) {
+			return null;
+		}
+		return actorRepo.findByFilms_Id(filmId);
+	}
+
+	@Override
+	public List<Film> findFilmByKeyword(String keyword) {
+		keyword = "%" + keyword + "%";
+		return filmRepo.findByTitleLikeOrDescriptionLike(keyword, keyword);
+	}
+
+	@Override
+	public List<Film> findFilmByBetweenRentalRateandRentalRate(double rentalRate1, double rentalRate2) {
+		List<Film> films = filmRepo.findAll();
+		List<Film> foundsFilms = null;
+		for (Film film: films) {
+			if (film.getRentalRate() > rentalRate1 && film.getRentalRate() < rentalRate2) {
+				foundsFilms = new ArrayList()<>;
+				foundsFilms.add(film);
+			}
+		}
+		return foundsFilms;
+	}
+}

@@ -1,0 +1,183 @@
+package com.skilldistillery.videostorerest.controllers;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.skilldistillery.jpavideostore.entities.Actor;
+import com.skilldistillery.jpavideostore.entities.Film;
+import com.skilldistillery.jpavideostore.entities.Language;
+import com.skilldistillery.videostorerest.services.FilmService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@RestController
+@RequestMapping("api")
+public class FilmController {
+
+	@Autowired
+	private FilmService filmService;
+
+	@GetMapping(path = "films")
+	public List<Film> index() {
+		return filmService.findAll();
+	}
+	
+	@GetMapping(path = "films/{cost1}/{cost2}")
+	public List<Film> filmsByRentalRate(@PathVariable("cost1") Double rentalCost1, @PathVariable("cost2") Double rentalCost2, HttpServletResponse req) {
+		List<Film> films = filmService.findFilmByBetweenRentalRateandRentalRate(rentalCost1, rentalCost2);
+		try {
+			if (films == null) {
+				req.setStatus(404);
+			}
+		} catch (Exception e) {
+			req.setStatus(200);
+			e.printStackTrace();
+		}
+		return films;
+	}
+	
+	@GetMapping(path = "films/replacement/{replaceCost1}/{replaceCost2}")
+	public List<Film> filmsByReplacementCost(@PathVariable("replaceCost1") Double replaceCost1, @PathVariable("replaceCost2") Double replaceCost2, HttpServletResponse req) {
+		List<Film> films = filmService.findFilmByBetweenRentalRateandRentalRate(replaceCost1, replaceCost2);
+		try {
+			if (films == null) {
+				req.setStatus(404);
+			}
+		} catch (Exception e) {
+			req.setStatus(200);
+			e.printStackTrace();
+		}
+		return films;
+	}
+
+	@GetMapping(path = "films/{id}")
+	public Film findById(@PathVariable("id") Integer id, HttpServletResponse req) {
+		Film film = filmService.findById(id);
+		try {
+			if (film == null) {
+				req.setStatus(404);
+			}
+		} catch (Exception e) {
+			req.setStatus(200);
+			e.printStackTrace();
+		}
+		return film;
+	}
+	
+	@GetMapping(path = "films/{id}")
+	public Film findById(@PathVariable("id") Integer id, HttpServletResponse req) {
+		Film film = filmService.findById(id);
+		try {
+			if (film == null) {
+				req.setStatus(404);
+			}
+		} catch (Exception e) {
+			req.setStatus(200);
+			e.printStackTrace();
+		}
+		return film;
+	}
+	
+	@GetMapping(path = "films/{language}")
+	public List <Film> findByLanguage(@PathVariable("language") Language language, HttpServletResponse req) {
+		List <Film> films = filmService.findFilmByLanguage(language);
+		try {
+			if (films == null) {
+				req.setStatus(404);
+			}
+		} catch (Exception e) {
+			req.setStatus(200);
+			e.printStackTrace();
+		}
+		return films;
+	}
+
+	@GetMapping(path = "films/{id}/actors")
+	public List<Actor> findActorsByFilm(@PathVariable("id") Integer id, HttpServletResponse req) {
+		List<Actor> actors = null;
+		Film film = filmService.findById(id);
+		try {
+			if (film != null) {
+				req.setStatus(200);
+				actors = filmService.getFilmActors(film.getId());
+			}
+		} catch (Exception e) {
+			req.setStatus(404);
+			e.printStackTrace();
+		}
+		return actors;
+	}
+
+	@GetMapping(path = "films/search/{keyword}")
+	public List<Film> showResults(@PathVariable("keyword") String keyword, HttpServletResponse req) {
+		List<Film> films = filmService.findFilmByKeyword(keyword);
+		try {
+			if (films == null) {
+				req.setStatus(404);
+			} else {
+				req.setStatus(200);
+			}
+		} catch (Exception e) {
+			req.setStatus(400);
+			e.printStackTrace();
+		}
+		return films;
+	}
+
+	@PostMapping(path = "films")
+	public Film create(@RequestBody Film film, HttpServletResponse req) {
+		film = filmService.create(film);
+		try {
+			if (film != null) {
+				req.setStatus(201);
+			}
+		} catch (Exception e) {
+			req.setStatus(400);
+			e.printStackTrace();
+		}
+		return film;
+	}
+
+	@PutMapping(path = "films/{id}")
+	public Film update(@PathVariable("id") Integer id, @RequestBody Film film, HttpServletResponse res,
+			HttpServletRequest req) {
+		try {
+			film = filmService.update(id, film);
+			if (film == null) {
+				res.setStatus(404);
+			}
+		} catch (Exception e) {
+			res.setStatus(400);
+			film = null;
+			e.printStackTrace();
+		}
+
+		return film;
+	}
+
+	// use delete mapping for delete operations. 204 NOT FOUND
+	@DeleteMapping(path = "films/{id}")
+	public boolean delete(@PathVariable("id") Integer id, HttpServletResponse res, HttpServletRequest req) {
+		try {
+			if (filmService.delete(id)) {
+				res.setStatus(204);
+				return true;
+			}
+		} catch (Exception e) {
+			res.setStatus(400);
+			e.printStackTrace();
+			return false;
+		}
+		return false;
+	}
+}

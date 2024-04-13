@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Search for Film</title>
+</head>
+<body>
+    <h1>Search for a Film</h1>
+    <div>
+        <h3>Search by Keyword:</h3>
+        <form action="searchFilmByKeyword.do" method="GET">
+            <label for="keyword">Keyword: </label>
+            <input type="text" name="keyword">
+            <input type="submit" value="Search">
+        </form>
+    </div>
+
+    <div>
+        <h3>Search by ID:</h3>
+        <form action="searchFilmById.do" method="GET">
+            <label for="id">ID: </label>
+            <input type="number" name="id">
+            <input type="submit" value="Search">
+        </form>
+    </div>
+    <p>
+        <a href=".">Return Home</a>
+    </p>
+</body>
+</html>

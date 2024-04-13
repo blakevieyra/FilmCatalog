@@ -1,0 +1,7 @@
+INDEX VERSION 1.4+/Users/blakevieyra/SD/Java/VideoStore/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+1489295492.index
+567045100.index
+3894020464.index
+2014209922.index
+2213807227.index
+371481936.index
