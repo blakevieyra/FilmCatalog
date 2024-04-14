@@ -551,7 +551,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	setTimeout(() => {
 		searchText.style.opacity = '1';
-		searchText.innerText = "Still searching for the best movies...";
+		searchText.innerText = "Still searching....";
 	}, 10000);
 });
 
@@ -563,7 +563,7 @@ document.addEventListener('click', function(e) {
 
 // Optionally, adjust the popcorn animation based on interactions
 document.getElementById('popcorn').addEventListener('mouseenter', function() {
-	this.style.animation = 'eatPopcorn 0.5s infinite'; // Speed up the eating animation on hover
+	this.style.animation = 'eatPopcorn 0.3s infinite'; // Speed up the eating animation on hover
 });
 
 document.getElementById('popcorn').addEventListener('mouseleave', function() {
@@ -582,10 +582,10 @@ container.addEventListener('mousemove', function(e) {
 
 	// Position the man element near the mouse cursor within the container
 	man.style.left = x + 'px';
-	man.style.top = y - man.offsetHeight / 2 + 'px'; // Center vertically relative to cursor
+	man.style.top = y - man.offsetHeight  + 'px'; // Center vertically relative to cursor
 	man.style.transition = 'left 0.1s linear, top 0.1s linear'; // Smooth movement
 	text.style.left = x + 'px';
-	text.style.top = y - man.offsetHeight / 2 + 'px'; // Center vertically relative to cursor
+	text.style.top = y - man.offsetHeight  + 'px'; // Center vertically relative to cursor
 	text.style.transition = 'left 0.1s linear, top 0.1s linear'; // Smooth movement
 });
 
