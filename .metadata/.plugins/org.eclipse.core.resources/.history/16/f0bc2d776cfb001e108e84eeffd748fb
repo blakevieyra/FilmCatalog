@@ -1,0 +1,236 @@
+package com.skilldistillery.jpavideostore.entities;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
+@Entity
+public class Film {
+
+	public Film() {}
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	private String title;
+
+	private String description;
+
+	@Column(name = "release_year")
+	private Integer releaseYear;
+
+	@Column(name = "rental_duration")
+	private Integer rentalDuration;
+
+	@Column(name = "rental_rate")
+	private double rentalRate;
+
+	private Integer length;
+
+	@Column(name = "replacement_cost")
+	private double replacementCost;
+
+	@Enumerated(EnumType.STRING)
+	private Rating rating;
+
+	@ManyToOne
+	@JoinColumn(name = "language_id")
+	private Language language;
+
+	@JsonIgnore
+	@ManyToMany(mappedBy = "films")
+	private List<Actor> actors;
+
+	@JsonIgnore
+	@ManyToMany(mappedBy = "films")
+	private List<Category> categories;
+	
+	//one film can mapped to many inventory items
+	@JsonIgnore
+	@OneToMany(mappedBy="film")
+	private List<InventoryItem> items;
+
+	public void addCategory(Category category) {
+		if (category == null) {
+			categories = new ArrayList<>();
+		}
+		if (!categories.contains(category)) {
+			category.addFilm(this);
+		}
+	}
+
+	public void removeCategory(Category category) {
+		if (categories != null && categories.contains(category)) {
+			categories.remove(category);
+			category.removeFilm(this);
+		}
+	}
+
+	public void addActor(Actor actor) {
+		if (actor == null) {
+			actors = new ArrayList<>();
+		}
+		if (!actors.contains(actor)) {
+			actor.addFilm(this);
+		}
+	}
+
+	public void removeActor(Actor actor) {
+		if (actors != null && actors.contains(actor)) {
+			actors.remove(actor);
+			actor.removeFilm(this);
+		}
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public int getRentalDuration() {
+		return rentalDuration;
+	}
+
+	public void setRentalDuration(int rentalDuration) {
+		this.rentalDuration = rentalDuration;
+	}
+
+	public double getRentalRate() {
+		return rentalRate;
+	}
+
+	public void setRentalRate(double rentalRate) {
+		this.rentalRate = rentalRate;
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
+	}
+
+	public double getReplacementCost() {
+		return replacementCost;
+	}
+
+	public void setReplacementCost(double replacementCost) {
+		this.replacementCost = replacementCost;
+	}
+
+	@Override
+	public String toString() {
+		return "Film [id=" + id + ", title=" + title + ", description=" + description + ", releaseYear=" + releaseYear
+				+ ", rentalDuration=" + rentalDuration + ", rentalRate=" + rentalRate + ", length=" + length
+				+ ", replacementCost=" + replacementCost + ", rating=" + rating + ", language=" + language + ", actors="
+				+ actors + "]";
+	}
+
+	public Rating getRating() {
+		return rating;
+	}
+
+	public void setRating(Rating rating) {
+		this.rating = rating;
+	}
+
+	public void setReleaseYear(Integer releaseYear) {
+		this.releaseYear = releaseYear;
+	}
+
+	public Integer getReleaseYear() {
+		return releaseYear;
+	}
+
+	public Language getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(Language language) {
+		this.language = language;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(actors, categories, description, id, items, language, length, rating, releaseYear,
+				rentalDuration, rentalRate, replacementCost, title);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Film other = (Film) obj;
+		return Objects.equals(actors, other.actors) && Objects.equals(categories, other.categories)
+				&& Objects.equals(description, other.description) && id == other.id
+				&& Objects.equals(items, other.items) && Objects.equals(language, other.language)
+				&& length == other.length && rating == other.rating && Objects.equals(releaseYear, other.releaseYear)
+				&& rentalDuration == other.rentalDuration
+				&& Double.doubleToLongBits(rentalRate) == Double.doubleToLongBits(other.rentalRate)
+				&& Double.doubleToLongBits(replacementCost) == Double.doubleToLongBits(other.replacementCost)
+				&& Objects.equals(title, other.title);
+	}
+
+	public List<Actor> getActors() {
+		return actors;
+	}
+
+	public void setActors(List<Actor> actors) {
+		this.actors = actors;
+	}
+
+	public List<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
+	}
+
+	public List<InventoryItem> getItems() {
+		return items;
+	}
+
+	public void setItems(List<InventoryItem> items) {
+		this.items = items;
+	}
+}

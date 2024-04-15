@@ -27,7 +27,7 @@ public class Category {
 	private String name;
 
 	@ManyToMany
-	@JoinTable(name = "film_category", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "film_id"))
+	@JoinTable(name = "film_has_category", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "film_id"))
 	@JsonIgnore
 	private List<Film> films;
 

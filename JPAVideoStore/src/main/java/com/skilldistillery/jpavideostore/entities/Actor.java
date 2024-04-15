@@ -33,7 +33,7 @@ public class Actor {
 	
 	@JsonIgnore
 	@ManyToMany
-	@JoinTable(name="film_actor",
+	@JoinTable(name="film_has_actor",
 			joinColumns=@JoinColumn(name="actor_id"),
 			inverseJoinColumns=@JoinColumn(name="film_id"))
 	private List<Film> films;

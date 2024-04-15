@@ -21,7 +21,8 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class Film {
 
-	public Film() {}
+	public Film() {
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,15 +36,15 @@ public class Film {
 	private Integer releaseYear;
 
 	@Column(name = "rental_duration")
-	private int rentalDuration;
+	private Integer rentalDuration;
 
 	@Column(name = "rental_rate")
-	private double rentalRate;
+	private Double rentalRate;
 
-	private int length;
+	private Integer length;
 
 	@Column(name = "replacement_cost")
-	private double replacementCost;
+	private Double replacementCost;
 
 	@Enumerated(EnumType.STRING)
 	private Rating rating;
@@ -59,10 +60,10 @@ public class Film {
 	@JsonIgnore
 	@ManyToMany(mappedBy = "films")
 	private List<Category> categories;
-	
-	//one film can mapped to many inventory items
+
+	// one film can mapped to many inventory items
 	@JsonIgnore
-	@OneToMany(mappedBy="film")
+	@OneToMany(mappedBy = "film")
 	private List<InventoryItem> items;
 
 	public void addCategory(Category category) {
@@ -121,7 +122,7 @@ public class Film {
 		this.description = description;
 	}
 
-	public int getRentalDuration() {
+	public Integer getRentalDuration() {
 		return rentalDuration;
 	}
 
@@ -129,11 +130,11 @@ public class Film {
 		this.rentalDuration = rentalDuration;
 	}
 
-	public double getRentalRate() {
+	public Double getRentalRate() {
 		return rentalRate;
 	}
 
-	public void setRentalRate(double rentalRate) {
+	public void setRentalRate(Double rentalRate) {
 		this.rentalRate = rentalRate;
 	}
 
@@ -145,11 +146,11 @@ public class Film {
 		this.length = length;
 	}
 
-	public double getReplacementCost() {
+	public Double getReplacementCost() {
 		return replacementCost;
 	}
 
-	public void setReplacementCost(double replacementCost) {
+	public void setReplacementCost(Double replacementCost) {
 		this.replacementCost = replacementCost;
 	}
 
@@ -187,8 +188,7 @@ public class Film {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(actors, categories, description, id, items, language, length, rating, releaseYear,
-				rentalDuration, rentalRate, replacementCost, title);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -200,14 +200,7 @@ public class Film {
 		if (getClass() != obj.getClass())
 			return false;
 		Film other = (Film) obj;
-		return Objects.equals(actors, other.actors) && Objects.equals(categories, other.categories)
-				&& Objects.equals(description, other.description) && id == other.id
-				&& Objects.equals(items, other.items) && Objects.equals(language, other.language)
-				&& length == other.length && rating == other.rating && Objects.equals(releaseYear, other.releaseYear)
-				&& rentalDuration == other.rentalDuration
-				&& Double.doubleToLongBits(rentalRate) == Double.doubleToLongBits(other.rentalRate)
-				&& Double.doubleToLongBits(replacementCost) == Double.doubleToLongBits(other.replacementCost)
-				&& Objects.equals(title, other.title);
+		return id == other.id;
 	}
 
 	public List<Actor> getActors() {

@@ -1,6 +1,13 @@
 h1 {
 	font-size:50px;
 }
+h2 {
+	font-size:30px;
+}
+blockquote {
+	font-size:26px;
+}
+
 
 body {
 	/* Sets the background image */
@@ -14,7 +21,7 @@ body {
 	background-position: center center;
 	/* Set the default text color to white for all content in body */
 	color: white;
-	font-size: 20px;
+	font-size: 22px;
 	/* Ensures the entire body, including min height, covers the whole viewport */
 	min-height: 100vh;
 	margin: 0; /* Removes default margin */
@@ -43,7 +50,7 @@ form {
     position: absolute;
     bottom: 100px;
     left: 50px; /* Starting position */
-    width: 60px; /* Adjust size accordingly */
+    width: 50px; /* Adjust size accordingly */
 /*     animation: walking 10s infinite; Animation now spells 'infinite' correctly and loops
  */}
 

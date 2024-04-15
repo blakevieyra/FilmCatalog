@@ -23,8 +23,8 @@ function init() {
 			rating: newFilmForm.rating.value,
 			releaseYear: newFilmForm.releaseYear.value,
 			length: newFilmForm.length.value,
-			rentalRate: newFilmForm.rentalRate.value,
-			replacementCost: newFilmForm.replacementCost.value,
+			//rentalRate: newFilmForm.rentalRate.value,
+			//replacementCost: newFilmForm.replacementCost.value,
 			language: {
 				id: newFilmForm.language.value
 			}
@@ -43,8 +43,8 @@ function init() {
 			rating: updatedFilmForm.rating.value,
 			releaseYear: updatedFilmForm.releaseYear.value,
 			length: updatedFilmForm.length.value,
-			rentalRate: updatedFilmForm.rentalRate.value,
-			replacementCost: updatedFilmForm.replacementCost.value,
+			//rentalRate: updatedFilmForm.rentalRate.value,
+			//replacementCost: updatedFilmForm.replacementCost.value,
 			language: {
 				id: updatedFilmForm.language.value
 			}
@@ -89,26 +89,26 @@ function init() {
 		actorData.textContent = '';
 		getFilmsByLanguage(language);
 	});
-	document.rentalPriceForm.rentalBtn.addEventListener('click', function(e) {
-		e.preventDefault();
-		console.log('searching rental cost');
-		let price1 = rentalPriceForm.price1.value;
-		let price2 = rentalPriceForm.price2.value;
-		console.log(price1, price2)
-		filmData.textContent = '';
-		actorData.textContent = '';
-		getFilmByRentalPrice(price1, price2);
-	});
-	document.replacePriceForm.replaceBtn.addEventListener('click', function(e) {
-		e.preventDefault();
-		console.log('searching replacement cost');
-		let price1 = replacePriceForm.price1.value;
-		let price2 = replacePriceForm.price2.value;
-		console.log(price1, price2)
-		filmData.textContent = '';
-		actorData.textContent = '';
-		getFilmByReplaceCost(price1, price2);
-	});
+	//document.rentalPriceForm.rentalBtn.addEventListener('click', function(e) {
+	//	e.preventDefault();
+	//	console.log('searching rental cost');
+	//	let price1 = rentalPriceForm.price1.value;
+	//	let price2 = rentalPriceForm.price2.value;
+	//	console.log(price1, price2)
+	//	filmData.textContent = '';
+	//	actorData.textContent = '';
+	//	getFilmByRentalPrice(price1, price2);
+	//});
+	//document.replacePriceForm.replaceBtn.addEventListener('click', function(e) {
+		//e.preventDefault();
+		//console.log('searching replacement cost');
+		//let price1 = replacePriceForm.price1.value;
+		//let price2 = replacePriceForm.price2.value;
+		//console.log(price1, price2)
+		//filmData.textContent = '';
+		//actorData.textContent = '';
+		//getFilmByReplaceCost(price1, price2);
+	//});
 	document.deleteFilmForm.deleteBtn.addEventListener('click', function(e) {
 		e.preventDefault();
 		console.log('deleting film');
@@ -386,6 +386,7 @@ function displaySearchedFilms(films) {
 		link.addEventListener('click', function(event) {
 			event.preventDefault();
 			displayFilm(film);
+			getActors(film.id);
 
 		});
 		li.appendChild(link);
@@ -425,20 +426,20 @@ function displayFilm(film) {
 	ul.appendChild(liReleaseYear);
 
 	let liLength = document.createElement('li');
-	liLength.textContent = "Film Length: " + film.length;
+	liLength.textContent = "Film Length: " + film.length + " minutes";
 	ul.appendChild(liLength);
 
 	let liLanguage = document.createElement('li');
 	liLanguage.textContent = "Language:  " + film.language.name;
 	ul.appendChild(liLanguage);
 
-	let liRentalPrice = document.createElement('li');
-	liRentalPrice.textContent = "Rental Price:  " + film.rentalRate;
-	ul.appendChild(liRentalPrice);
+	//let liRentalPrice = document.createElement('li');
+	//liRentalPrice.textContent = "Rental Price:  " + film.rentalRate;
+	//ul.appendChild(liRentalPrice);
 
-	let liReplacementCost = document.createElement('li');
-	liReplacementCost.textContent = "Replacement Cost:  " + film.replacementCost;
-	ul.appendChild(liReplacementCost);
+	//let liReplacementCost = document.createElement('li');
+	//liReplacementCost.textContent = "Replacement Cost:  " + film.replacementCost;
+	//ul.appendChild(liReplacementCost);
 
 	dataDiv.appendChild(ul);
 }
@@ -563,7 +564,7 @@ document.addEventListener('click', function(e) {
 
 // Optionally, adjust the popcorn animation based on interactions
 document.getElementById('popcorn').addEventListener('mouseenter', function() {
-	this.style.animation = 'eatPopcorn 0.3s infinite'; // Speed up the eating animation on hover
+	this.style.animation = 'eatPopcorn 0.5s infinite'; // Speed up the eating animation on hover
 });
 
 document.getElementById('popcorn').addEventListener('mouseleave', function() {
